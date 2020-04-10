@@ -72,7 +72,7 @@ function DCparams(closure::Symbol;maxiter::Int64 = 2000,
 					λ::Float64 = 0.0,
 					update::Symbol = :par,
 					rndamp::Bool = false,
-					epsclamp::Float64 = 0.0,
+					epsclamp::Float64 = 1e-15,
 					η::Float64 = 1.0,
 					verbose::Bool = true)
 

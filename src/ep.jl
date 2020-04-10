@@ -47,17 +47,17 @@ function density_consistency(Ψ::Vector{<:Factor},N::Int;
                 Sc[a] .= (Σ[∂a, ∂a] + λ * I)\eye(length(∂a)) - S[a]
                 yc[a] .= (Σ[∂a, ∂a] + λ * I)\μ[∂a] - h[a]
 	    end
-            avt, covt = moments(ψₐ,yc[a],Sc[a])
-            ynew,Snew = setclosure(ψₐ,yc[a],Sc[a],closure,η,λ,epsclamp)
+            #avt, covt = moments(ψₐ,yc[a],Sc[a])
+            ynew,Snew, εₘ = setclosure!(ψₐ,yc[a],Sc[a],µtl[a],Σtl[a],closure,η,λ,epsclamp,εₘ)
             if update == :seq
                 ε = max(ε, update!(S[a], Snew, ρ), update!(h[a], ynew, ρ))
 				A[∂a,∂a] .+= S[a]; y[∂a] .+= h[a]
             elseif update == :par
-                ρr= rndamp*(1-ρ)*(2*rand()-1) + ρ    # ρr ~ U(2ρ-1,1) (with <ρ̃>=ρ) if rndamp true
+                ρr = rndamp*(1-ρ)*(2*rand()-1) + ρ    # ρr ~ U(2ρ-1,1) (with <ρ̃>=ρ) if rndamp true
                 ε = max(ε, update!(S[a], Snew,ρr), update!(h[a], ynew,ρr))
             end
-            εₘ = max(εₘ , update!(μtl[a],avt,0.0), update!(Σtl[a],covt,0.0))
-            μt[∂a] .= avt ; Σt[∂a,∂a] .= covt
+            #εₘ = max(εₘ , update!(μtl[a],avt,0.0), update!(Σtl[a],covt,0.0))
+            μt[∂a] .= µtl[a] ; Σt[∂a,∂a] .= Σtl[a]
             #μt[∂a] .+= avt./d[∂a]; Σt[∂a,∂a] .= covt
             #Σt[∂a,∂a] .+= Diagonal(covt).*(1 ./d[∂a]-1)
         end

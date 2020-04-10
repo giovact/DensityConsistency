@@ -32,22 +32,16 @@ end
 This function should compute first and second moments of exp(-F.E(x) -½ x'*S*x + x'*y)
 """
 
-function moments2(F::Factor, y::Vector{Float64}, S::Array{Float64,2})
-    mineps = 1e-15
-    av,cov = moments(F,y,S)
-#   if det(cov)==0 println("tilted:",cov) end
-    #@assert(av.^2 .<= 1)
-    f(x) = sqrt(1-x)/(atanh(sqrt(1-x))*x)
-    var = sqrt.(f.(clamp.(diag(cov), mineps, 1-mineps)))
-    cov .*= var * var'
-    return av, cov
-end
+pearsonmap(x) = sqrt(1-x)/(atanh(sqrt(1-x))*x)
 
-function setclosure(F::Factor, y::Vector{Float64}, S::Array{Float64,2},closure::Symbol,η::Float64,λ::Float64,clampf::Float64)
-  mineps=1e-15
+function setclosure!(F::Factor, y::Vector{Float64}, S::Array{Float64,2},µta::Vector{Float64}, Σta::Array{Float64,2},closure::Symbol,η::Float64,λ::Float64,epsclamp::Float64,epsmom::Float64)
+
   #c=[d[F.idx[1]]; d[F.idx[2]]];
+  av,cov = moments(F, y, S)
+  epsmom = max(epsmom , update!(μta,av,0.0), update!(Σta,cov,0.0))
     if closure == :DC
-        av, cov = moments2(F, y, S)
+        var = sqrt.(pearsonmap.(clamp.(diag(cov), epsclamp, 1-epsclamp)))
+        cov .*= var * var'
         cov = η*cov+(1-η)*Diagonal(cov)
         icov = inv(cov + λ * I)
         Snew = icov-S
@@ -60,5 +54,5 @@ function setclosure(F::Factor, y::Vector{Float64}, S::Array{Float64,2},closure::
     else
         throw("Select a valid closure")
     end
-    return ynew,Snew
+    return ynew,Snew,epsmom
 end
