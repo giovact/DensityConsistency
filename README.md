@@ -1,10 +1,16 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Density Consistency algorithm implementation in Julia 1.3.1
 
 ### What is this repository for? ###
+### Require ###
+
+Random, SparseArrays
+
 
 * Quick summary
+
+
 * Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 

@@ -13,6 +13,7 @@ function density_consistency(Ψ::Vector{<:Factor},N::Int;
 			algvars::DCparams = DCparams(:DC),
 			Hg::Vector{Float64} = zeros(N),
 			Ag::Matrix{Float64} = zeros(N,N),
+			convtype::Symbol = :moments,
 			callback::Function  = (x...)->nothing,
             state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)]) )
 
@@ -35,20 +36,19 @@ function density_consistency(Ψ::Vector{<:Factor},N::Int;
             A[∂a,∂a] .+= S[a]; y[∂a] .+= h[a]
         end
         perm = collect(1:M) #might be put at the beginning
-        randperm!(perm) #requires Random
-      	if update == :par Σ .= inv(A + Λ * I); μ .= Σ * y; end #might be useful also for rndseq
+        randperm!(perm)
+      	Σ .= inv(A + Λ * I); μ .= Σ * y; # also defined in rndseq update
         for a in perm
             ψₐ=Ψ[a]; ∂a = ψₐ.idx
-	    if update == :seq
-	    	A[∂a, ∂a] .-= S[a]; y[∂a] .-= h[a]
-            Σa = ((A + Λ * I) \ Id[:, ∂a])[∂a,:]; Sc[a] .= (Σa + λ * I) \ eye(length(∂a))
-            μa = ((A + Λ * I) \ y)[∂a]; yc[a] .= Sc[a] * μa
-	    elseif update == :par
+	    	if update == :seq
+	    		A[∂a, ∂a] .-= S[a]; y[∂a] .-= h[a]
+            	Σa = ((A + Λ * I) \ Id[:, ∂a])[∂a,:]; Sc[a] .= (Σa + λ * I) \ eye(length(∂a))
+            	μa = ((A + Λ * I) \ y)[∂a]; yc[a] .= Sc[a] * μa
+	    	elseif update == :par
                 Sc[a] .= (Σ[∂a, ∂a] + λ * I)\eye(length(∂a)) - S[a]
                 yc[a] .= (Σ[∂a, ∂a] + λ * I)\μ[∂a] - h[a]
-	    end
-            #avt, covt = moments(ψₐ,yc[a],Sc[a])
-            ynew,Snew, εₘ = setclosure!(ψₐ,yc[a],Sc[a],µtl[a],Σtl[a],closure,ρ,λ,epsclamp,εₘ)
+	    	end
+            ynew, Snew, εₘ = setclosure!(ψₐ,yc[a],Sc[a],µtl[a],Σtl[a],closure,ρ,λ,epsclamp,εₘ)
             if update == :seq
                 ε = max(ε, update!(S[a], Snew, η), update!(h[a], ynew, η))
 				A[∂a,∂a] .+= S[a]; y[∂a] .+= h[a]
@@ -56,21 +56,20 @@ function density_consistency(Ψ::Vector{<:Factor},N::Int;
                 ηr = rndamp*(1-ρ)*(2*rand()-1) + η    # ρr ~ U(2ρ-1,1) (with <ρ̃>=ρ) if rndamp true
                 ε = max(ε, update!(S[a], Snew,ηr), update!(h[a], ynew,ηr))
             end
-            #εₘ = max(εₘ , update!(μtl[a],avt,0.0), update!(Σtl[a],covt,0.0))
             μt[∂a] .= µtl[a] ; Σt[∂a,∂a] .= Σtl[a]
-            #μt[∂a] .+= avt./d[∂a]; Σt[∂a,∂a] .= covt
-            #Σt[∂a,∂a] .+= Diagonal(covt).*(1 ./d[∂a]-1)
         end
-        #if callback(state,iter,[ε, εₘ]) != nothing
-        #    break
-        #end
-		callback(state,iter,[ε, εₘ])
+        callback(state,iter,[ε, εₘ])
         iter+=1
-        if ε < epsconv
-			verbose && println("Closure $closure converged in $iter iterations")
+        if check_convergence(ε,εₘ,epsconv,convtype)
+			verbose && println("Closure $closure converged in $iter iterations w.r.t $convtype$")
 			return state, :converged, iter, [ε, εₘ]
 		end
     end
-	verbose && println("Closure $closure NOT converged ")
+	verbose && println("Closure $closure NOT converged w.r.t $convtype$")
     return state, :unconverged, iter, [ε, εₘ]
+end
+
+function check_convergence(err_params::Float64,err_moments::Float64,epsconv::Float64,convtype::Symbol)
+	convtype == :params && return err_params < epsconv
+	convtype == :moments && return err_moments < epsconv
 end

@@ -34,7 +34,7 @@ This function should compute first and second moments of exp(-F.E(x) -½ x'*S*x 
 
 pearsonmap(x) = sqrt(1-x)/(atanh(sqrt(1-x))*x)
 
-function setclosure!(F::Factor, y::Vector{Float64}, S::Array{Float64,2},µta::Vector{Float64}, Σta::Array{Float64,2},closure::Symbol,η::Float64,λ::Float64,epsclamp::Float64,epsmom::Float64)
+function setclosure!(F::<:Factor, y::Vector{Float64}, S::Array{Float64,2},µta::Vector{Float64}, Σta::Array{Float64,2},closure::Symbol,η::Float64,λ::Float64,epsclamp::Float64,epsmom::Float64)
 
   #c=[d[F.idx[1]]; d[F.idx[2]]];
   av,cov = moments(F, y, S)

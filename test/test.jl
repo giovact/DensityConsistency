@@ -1,7 +1,7 @@
-include("src/GEP.jl")
+include("../src/GEP.jl")
 using JLD, SparseArrays
 
-tree = load("test_tree.jld");
+tree = load("ising_chain.jld");
 psi = DC.IsingConstructor(20,tree["h"],tree["J"],tree["degreevector"],:Fun);
 psiI = DC.IsingConstructor(20,tree["h"],tree["J"],tree["degreevector"],:Fun);
 ϕ , res, it, epsv = @timev DC.density_consistency(psi,20)
