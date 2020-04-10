@@ -50,7 +50,7 @@ end
 
 struct DCparams
 	maxiter	:: Int				# maximum number of iterations
-	ρ :: Float64				# damping for parameters' update (ρ = 0 means no damping)
+	η :: Float64				# damping for parameters' update (ρ = 0 means no damping)
 	γ0:: Float64				# reinforcement
 	epsconv :: Float64			# precision convergence
 	Λ :: Float64				# add a diagonal matrix Λ*I in the inversion of the full correlation matrix
@@ -59,13 +59,13 @@ struct DCparams
 	update :: Symbol			# type of update (parallel or sequential)
 	rndamp :: Bool				# eventually, apply a random damping (might be useful in parallel update)
 	epsclamp :: Float64			# clamp
-	η :: Float64				# interpolation parameter (DC closure)
+	ρ :: Float64				# interpolation parameter (DC closure)
 	verbose :: Bool				# print at (un)convergence
 end
 
 
 function DCparams(closure::Symbol;maxiter::Int64 = 2000,
-					ρ::Float64 = 0.9,
+					η::Float64 = 0.9,
 					γ0::Float64 = 0.0,
 					epsconv::Float64 = 1e-6,
 					Λ::Float64 = 0.0,
@@ -73,8 +73,8 @@ function DCparams(closure::Symbol;maxiter::Int64 = 2000,
 					update::Symbol = :par,
 					rndamp::Bool = false,
 					epsclamp::Float64 = 1e-15,
-					η::Float64 = 1.0,
+					ρ::Float64 = 1.0,
 					verbose::Bool = true)
 
-	return DCparams(maxiter,ρ,γ0,epsconv,Λ,λ,closure,update,rndamp,epsclamp,η,verbose)
+	return DCparams(maxiter,η,γ0,epsconv,Λ,λ,closure,update,rndamp,epsclamp,ρ,verbose)
 end

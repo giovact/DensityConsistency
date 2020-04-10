@@ -17,7 +17,7 @@ function density_consistency(Ψ::Vector{<:Factor},N::Int;
             state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)]) )
 
     @extract state : μtl Σtl μt Σt µ Σ h S yc Sc
-	@extract algvars : maxiter ρ γ0 epsconv Λ λ closure update rndamp epsclamp η verbose
+	@extract algvars : maxiter η γ0 epsconv Λ λ closure update rndamp epsclamp ρ verbose
 
 	A,y = zeros(N,N), zeros(N)
     Id = Matrix(1.0I, N, N); M = length(Ψ);
@@ -48,13 +48,13 @@ function density_consistency(Ψ::Vector{<:Factor},N::Int;
                 yc[a] .= (Σ[∂a, ∂a] + λ * I)\μ[∂a] - h[a]
 	    end
             #avt, covt = moments(ψₐ,yc[a],Sc[a])
-            ynew,Snew, εₘ = setclosure!(ψₐ,yc[a],Sc[a],µtl[a],Σtl[a],closure,η,λ,epsclamp,εₘ)
+            ynew,Snew, εₘ = setclosure!(ψₐ,yc[a],Sc[a],µtl[a],Σtl[a],closure,ρ,λ,epsclamp,εₘ)
             if update == :seq
-                ε = max(ε, update!(S[a], Snew, ρ), update!(h[a], ynew, ρ))
+                ε = max(ε, update!(S[a], Snew, η), update!(h[a], ynew, η))
 				A[∂a,∂a] .+= S[a]; y[∂a] .+= h[a]
             elseif update == :par
-                ρr = rndamp*(1-ρ)*(2*rand()-1) + ρ    # ρr ~ U(2ρ-1,1) (with <ρ̃>=ρ) if rndamp true
-                ε = max(ε, update!(S[a], Snew,ρr), update!(h[a], ynew,ρr))
+                ηr = rndamp*(1-ρ)*(2*rand()-1) + η    # ρr ~ U(2ρ-1,1) (with <ρ̃>=ρ) if rndamp true
+                ε = max(ε, update!(S[a], Snew,ηr), update!(h[a], ynew,ηr))
             end
             #εₘ = max(εₘ , update!(μtl[a],avt,0.0), update!(Σtl[a],covt,0.0))
             μt[∂a] .= µtl[a] ; Σt[∂a,∂a] .= Σtl[a]
