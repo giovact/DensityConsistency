@@ -61,11 +61,11 @@ function density_consistency(Ψ::Vector{<:Factor},N::Int;
         callback(state,iter,[ε, εₘ])
         iter+=1
         if check_convergence(ε,εₘ,epsconv,convtype)
-			verbose && println("Closure $closure converged in $iter iterations w.r.t $convtype$")
+			verbose && println("Closure $closure converged in $iter iterations w.r.t $convtype")
 			return state, :converged, iter, [ε, εₘ]
 		end
     end
-	verbose && println("Closure $closure NOT converged w.r.t $convtype$")
+	verbose && println("Closure $closure NOT converged w.r.t $convtype")
     return state, :unconverged, iter, [ε, εₘ]
 end
 

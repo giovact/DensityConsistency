@@ -1,4 +1,4 @@
-include("../src/GEP.jl")
+include("../src/DC.jl")
 using JLD, SparseArrays
 
 tree = load("ising_chain.jld");
