@@ -12,11 +12,12 @@ struct FactorIsing <: Factor
     idx::Vector{Int64}
 end
 
-function IsingConstructor(N::Int64,h::Vector{Float64},J::Matrix{Float64},d::Vector{Int64},t::Symbol)
+function IsingConstructor(N::Int64,h::Vector{Float64},J::SparseMatrixCSC{Float64,Int64},t::Symbol, Adj::SparseMatrixCSC{Bool,Int64} = (J.!=0 ) )
+	degree = sum(Adj,dims = 2)[:]
 	if t == :Fun
-		return collect([FactorFun((x::Vector{Int64}-> -( J[i,j]*x[1]*x[2]+x[1]*(h[i]/d[i])+ x[2]*(h[j]/d[j]))),[i,j] ) for i=1:N, j=1:N if J[i,j]!=0 && i<j])
-	elseif t== :Is
-		return collect([FactorIsing(J[i,j],h[i]/d[i],h[j]/d[j],[i;j] ) for i=1:N, j=1:N if J[i,j]!=0 && i<j])
+		return collect([FactorFun((x::Vector{Int64}-> -( J[i,j]*x[1]*x[2]+x[1]*(h[i]/degree[i])+ x[2]*(h[j]/degree[j]))),[i,j] ) for i=1:N, j=1:N if Adj[i,j]!=0 && i<j])
+	elseif t == :Is
+		return collect([FactorIsing(J[i,j],h[i]/degree[i],h[j]/degree[j],[i;j] ) for i=1:N, j=1:N if Adj[i,j]!=0 && i<j])
 	end
 end
 
