@@ -1,7 +1,9 @@
 eye(N) = Matrix(1.0I, N, N)
 
 function update!(old,new,ρ=0.0)
-    r=norm(new-old,Inf); old .*=ρ ; old .+= (1-ρ)*new;
+    r=norm(new-old,Inf);
+	old .*=ρ ;
+	old .+= (1-ρ)*new;
     return r
 end
 
