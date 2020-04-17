@@ -15,7 +15,7 @@ function density_consistency(Ψ::Vector{<:Factor},N::Int;
 			algvars::DCparams = DCparams(:DC),
 			Hg::Vector{Float64} = zeros(N),
 			Ag::Matrix{Float64} = zeros(N,N),
-			convtype::Symbol = :moments,
+			convtype::Symbol = :params,
 			callback::Function  = (x...)->nothing,
             state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)]) )
 
