@@ -12,7 +12,7 @@ struct FactorIsing <: Factor
     idx::Vector{Int64}
 end
 
-function IsingConstructor(N::Int64,h::Vector{Float64},J::SparseMatrixCSC{Float64,Int64},t::Symbol, Adj::SparseMatrixCSC{Bool,Int64} = (J. != 0) )
+function IsingConstructor(N::Int64,h::Vector{Float64},J::SparseMatrixCSC{Float64,Int64},t::Symbol, Adj::SparseMatrixCSC{Bool,Int64} = (J .!= 0) )
 	degree = sum(Adj,dims = 2)[:]
 	if t == :Fun
 		return collect([FactorFun((x::Vector{Int64}-> -( J[i,j]*x[1]*x[2]+x[1]*(h[i]/degree[i])+ x[2]*(h[j]/degree[j]))),[i,j] ) for i=1:N, j=1:N if Adj[i,j]!=0 && i<j])
