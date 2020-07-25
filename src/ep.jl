@@ -8,19 +8,32 @@ function update!(old,new,ρ=0.0)
 end
 
 """
-Density consistency or generic consistency propagation algorithm
+Density consistency algorithm
 """
 
-function density_consistency(Ψ::Vector{<:Factor},N::Int;
-			algvars::DCparams = DCparams(:DC),
+function density_consistency(Ψ::Vector{<:Factor},
+			N::Int;
+			state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)]),
+			closure::Symbol = :DC,									# closure protocol (default = :DC)
+			maxiter::Int64 = 2000,
+			η::Float64 = 0.9, 										# damping for parameters' update (η = 0 means no damping)
+			γ0::Float64 = 0.0,										# reinforcement
+			epsconv::Float64 = 1e-6,								# precision convergence
+			Λ::Float64 = 0.0,										# add a diagonal matrix Λ*I in the inversion of the full correlation matrix
+			λ::Float64 = 0.0,										# add a diagonal matrix λ*I in the inversion of the cavity and tilted correlation matrices
+			update::Symbol = :par,									# type of update (parallel or sequential)
+			rndamp::Bool = false,									# eventually, apply a random damping (might be useful in parallel update)
+			epsclamp::Float64 = 1e-15,								# clamp
+			ρ::Float64 = 1.0,										# interpolation parameter (DC closure)
+			verbose::Bool = true,									# print at (un)convergence
 			Hg::Vector{Float64} = zeros(N),
 			Ag::Matrix{Float64} = zeros(N,N),
 			convtype::Symbol = :params,
-			callback::Function  = (x...)->nothing,
-            state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)]) )
+			callback::Function  = (x...)->nothing
+			)
 
     @extract state : μtl Σtl μt Σt µ Σ h S yc Sc
-	@extract algvars : maxiter η γ0 epsconv Λ λ closure update rndamp epsclamp ρ verbose
+
 
 	A,y = zeros(N,N), zeros(N)
     Id = Matrix(1.0I, N, N); M = length(Ψ);

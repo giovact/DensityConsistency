@@ -39,43 +39,11 @@ function DCState(N::Int,m::Vector{Int};f::Function=n->(rand(n) .- 0.5))
     return DCState([zeros(m[a]) for a=1:M],
                    [zeros(m[a],m[a]) for a=1:M],
                    zeros(N),
-                   zeros(N,N),
+                   zeros(N,N),propagation
 				   zeros(N),
                    zeros(N,N),
                    [f(m[a]) for a=1:M],
                    [eye(m[a]) for a=1:M],
                    [zeros(m[a]) for a=1:M],
                    [zeros(m[a],m[a]) for a=1:M])
-end
-
-
-struct DCparams
-	maxiter	:: Int				# maximum number of iterations
-	η :: Float64				# damping for parameters' update (ρ = 0 means no damping)
-	γ0:: Float64				# reinforcement
-	epsconv :: Float64			# precision convergence
-	Λ :: Float64				# add a diagonal matrix Λ*I in the inversion of the full correlation matrix
-	λ :: Float64				# add a diagonal matrix λ*I in the inversion of the cavity and tilted correlation matrices
-	closure :: Symbol			# closure protocol (default = :DC)
-	update :: Symbol			# type of update (parallel or sequential)
-	rndamp :: Bool				# eventually, apply a random damping (might be useful in parallel update)
-	epsclamp :: Float64			# clamp
-	ρ :: Float64				# interpolation parameter (DC closure)
-	verbose :: Bool				# print at (un)convergence
-end
-
-
-function DCparams(closure::Symbol;maxiter::Int64 = 2000,
-					η::Float64 = 0.9,
-					γ0::Float64 = 0.0,
-					epsconv::Float64 = 1e-6,
-					Λ::Float64 = 0.0,
-					λ::Float64 = 0.0,
-					update::Symbol = :par,
-					rndamp::Bool = false,
-					epsclamp::Float64 = 1e-15,
-					ρ::Float64 = 1.0,
-					verbose::Bool = true)
-
-	return DCparams(maxiter,η,γ0,epsconv,Λ,λ,closure,update,rndamp,epsclamp,ρ,verbose)
 end
