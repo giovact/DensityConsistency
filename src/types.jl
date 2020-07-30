@@ -39,7 +39,7 @@ function DCState(N::Int,m::Vector{Int};f::Function=n->(rand(n) .- 0.5))
     return DCState([zeros(m[a]) for a=1:M],
                    [zeros(m[a],m[a]) for a=1:M],
                    zeros(N),
-                   zeros(N,N),propagation
+                   zeros(N,N),
 				   zeros(N),
                    zeros(N,N),
                    [f(m[a]) for a=1:M],
