@@ -29,10 +29,13 @@ function density_consistency(Ψ::Vector{<:Factor},
 			Hg::Vector{Float64} = zeros(N),
 			Ag::Matrix{Float64} = zeros(N,N),
 			convtype::Symbol = :params,								# convergence criterion : tilted moments or gaussian factor parameters
+			seed :: Int64 = -1,
 			callback::Function  = (x...)->nothing
 			)
 
     @extract state : μtl Σtl μt Σt µ Σ h S yc Sc
+
+	seed != -1 && Random.seed!(seed) #set the seed
 
 	A,y = zeros(N,N), zeros(N)
     Id = Matrix(1.0I, N, N); M = length(Ψ);
