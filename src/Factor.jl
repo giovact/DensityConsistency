@@ -1,11 +1,11 @@
-function moments(F::FactorIsing, y::Vector{Float64}, S::Array{Float64,2})
+function moments(F::PairIsing, y::Vector{Float64}, S::Array{Float64,2})
     mi = tanh(F.hi + y[1] + atanh(tanh(F.J - S[1,2]) * tanh(F.hj + y[2])))
     mj = tanh(F.hj + y[2] + atanh(tanh(F.J - S[1,2]) * tanh(F.hi + y[1])))
     cij = tanh(F.J - S[1,2] + atanh(tanh(F.hj + y[2]) * tanh(F.hi + y[1]))) - mi*mj
     [mi;mj],[1-mi^2 cij; cij 1-mj^2]
 end
 
-function moments(F::FactorFun, y::Vector{Float64}, S::Array{Float64,2})
+function moments(F::EnergyFun, y::Vector{Float64}, S::Array{Float64,2})
     n = length(F.idx)
     N = 1<<n
     av = zeros(n)
@@ -34,7 +34,15 @@ This function should compute first and second moments of exp(-F.E(x) -½ x'*S*x 
 
 pearsonmap(x) = sqrt(1-x)/(atanh(sqrt(1-x))*x)
 
-function setclosure!(F::Factor, y::Vector{Float64}, S::Array{Float64,2},µta::Vector{Float64}, Σta::Array{Float64,2},closure::Symbol,η::Float64,λ::Float64,epsclamp::Float64,epsmom::Float64)
+function setclosure!(F::Factor, y::Vector{Float64},
+                        S::Array{Float64,2},
+                        µta::Vector{Float64},
+                        Σta::Array{Float64,2},
+                        closure::Symbol,
+                        η::Float64,
+                        λ::Float64,
+                        epsclamp::Float64,
+                        epsmom::Float64)
 
   #c=[d[F.idx[1]]; d[F.idx[2]]];
   av,cov = moments(F, y, S)
