@@ -5,6 +5,6 @@ export DCState
 
 include("types.jl")
 include("Factor.jl")
-include("ep.jl")
+include("dc_main.jl")
 
 end # end module

@@ -28,12 +28,11 @@ function density_consistency(Ψ::Vector{<:Factor},
 			verbose::Bool = true,									# print at (un)convergence
 			Hg::Vector{Float64} = zeros(N),
 			Ag::Matrix{Float64} = zeros(N,N),
-			convtype::Symbol = :params,
+			convtype::Symbol = :params,								# convergence criterion : tilted moments or gaussian factor parameters
 			callback::Function  = (x...)->nothing
 			)
 
     @extract state : μtl Σtl μt Σt µ Σ h S yc Sc
-
 
 	A,y = zeros(N,N), zeros(N)
     Id = Matrix(1.0I, N, N); M = length(Ψ);
