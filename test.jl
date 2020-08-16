@@ -66,3 +66,19 @@ end
 #        end
 #    end
 #end
+@testset "Equivalence of Ising Constructors" begin
+    dir = "test/random_graphs/"
+    ls = readdir(dir)
+    filenames = replace.(ls[findall(occursin.("model",ls))], "model.jld"=>"")
+    model = load(string(dir,filenames[3],"model.jld"));
+    N = length(model["h"])
+    β = 0.2
+    psiF = DC.IsingFactors(N,β*model["h"],β*sparse(model["J"]), model["Adj"], :Fun);
+    psiPI = DC.IsingFactors(N,β*model["h"],β*sparse(model["J"]), model["Adj"], :PairIsing);
+    ϕF , res, it, epsv = DC.density_consistency(psiF,N,verbose = false, epsconv = 1e-10)
+    ϕI , res, it, epsv = DC.density_consistency(psiPI,N,verbose = false, epsconv = 1e-10)
+    #@testset "fields $x" for x in fieldnames(typeof(ϕF))
+    #    @test isapprox(getfield(ϕF,x),getfield(ϕI,x),atol = 1e-9)
+    #end
+    @test isapprox(ϕF.µt,ϕI.µt,atol = 1e-9)
+end

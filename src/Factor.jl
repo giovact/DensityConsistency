@@ -2,7 +2,7 @@ function moments(F::PairIsing, y::Vector{Float64}, S::Array{Float64,2})
     mi = tanh(F.hi + y[1] + atanh(tanh(F.J - S[1,2]) * tanh(F.hj + y[2])))
     mj = tanh(F.hj + y[2] + atanh(tanh(F.J - S[1,2]) * tanh(F.hi + y[1])))
     cij = tanh(F.J - S[1,2] + atanh(tanh(F.hj + y[2]) * tanh(F.hi + y[1]))) - mi*mj
-    [mi;mj],[1-mi^2 cij; cij 1-mj^2]
+    return [mi;mj],[1-mi^2 cij; cij 1-mj^2]
 end
 
 function moments(F::EnergyFun, y::Vector{Float64}, S::Array{Float64,2})
@@ -44,7 +44,7 @@ function setclosure!(F::Factor, y::Vector{Float64},
                         epsclamp::Float64,
                         epsmom::Float64)
 
-  #c=[d[F.idx[1]]; d[F.idx[2]]];
+
   av,cov = moments(F, y, S)
   epsmom = max(epsmom , update!(μta,av,0.0), update!(Σta,cov,0.0))
     if closure == :DC

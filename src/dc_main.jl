@@ -19,8 +19,8 @@ function density_consistency(Ψ::Vector{<:Factor},
 			η::Float64 = 0.9, 										# damping for parameters' update (η = 0 means no damping)
 			γ0::Float64 = 0.0,										# reinforcement
 			epsconv::Float64 = 1e-6,								# precision convergence
-			Λ::Float64 = 0.0,										# add a diagonal matrix Λ*I in the inversion of the full correlation matrix
-			λ::Float64 = 0.0,										# add a diagonal matrix λ*I in the inversion of the cavity and tilted correlation matrices
+			Λ::Float64 = 1e-15,										# add a diagonal matrix Λ*I in the inversion of the full correlation matrix
+			λ::Float64 = 1e-15,										# add a diagonal matrix λ*I in the inversion of the cavity and tilted correlation matrices
 			update::Symbol = :par,									# type of update (parallel or sequential)
 			rndamp::Bool = false,									# eventually, apply a random damping (might be useful in parallel update)
 			epsclamp::Float64 = 1e-15,								# clamp
