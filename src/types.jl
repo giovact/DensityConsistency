@@ -34,7 +34,7 @@ struct DCState
     Sc  :: Vector{Matrix}			# array of cavity inverse correlation matrix (one for each factor)
 end
 
-function DCState(N::Int,m::Vector{Int};f::Function=n->(rand(n) .- 0.5))
+function DCState(N::Int,m::Vector{Int};f::Function=n->2e-2*(rand(n) .- 0.5))
     M=length(m)
     return DCState([zeros(m[a]) for a=1:M],
                    [zeros(m[a],m[a]) for a=1:M],
