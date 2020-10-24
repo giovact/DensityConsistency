@@ -16,7 +16,7 @@ function density_consistency(Ψ::Vector{<:Factor},
 			state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)]),
 			closure::Symbol = :DC,									# closure protocol (default = :DC)
 			maxiter::Int64 = 2000,
-			η::Float64 = 0.9, 										# damping for parameters' update (η = 0 means no damping)
+			η::Float64 = 1.0, 										# interpolation parameter (DC closure)
 			γ0::Float64 = 0.0,										# reinforcement
 			epsconv::Float64 = 1e-6,								# precision convergence
 			Λ::Float64 = 1e-15,										# add a diagonal matrix Λ*I in the inversion of the full correlation matrix
@@ -24,7 +24,7 @@ function density_consistency(Ψ::Vector{<:Factor},
 			update::Symbol = :par,									# type of update (parallel or sequential)
 			rndamp::Bool = false,									# eventually, apply a random damping (might be useful in parallel update)
 			epsclamp::Float64 = 1e-15,								# clamp
-			ρ::Float64 = 1.0,										# interpolation parameter (DC closure)
+			ρ::Float64 = 0.0,										# damping for parameters' update (η = 0 means no damping)
 			verbose::Bool = true,									# print at (un)convergence
 			Hg::Vector{Float64} = zeros(N),
 			Ag::Matrix{Float64} = zeros(N,N),
@@ -65,13 +65,13 @@ function density_consistency(Ψ::Vector{<:Factor},
                 Sc[a] .= (Σ[∂a, ∂a] + λ * I)\eye(length(∂a)) - S[a]
                 yc[a] .= (Σ[∂a, ∂a] + λ * I)\μ[∂a] - h[a]
 	    	end
-            ynew, Snew, εₘ = setclosure!(ψₐ,yc[a],Sc[a],µtl[a],Σtl[a],closure,ρ,λ,epsclamp,εₘ)
+            ynew, Snew, εₘ = setclosure!(ψₐ,yc[a],Sc[a],µtl[a],Σtl[a],closure,η,λ,epsclamp,εₘ)
             if update == :seq
-                ε = max(ε, update!(S[a], Snew, η), update!(h[a], ynew, η))
+                ε = max(ε, update!(S[a], Snew, ρ), update!(h[a], ynew, ρ))
 				A[∂a,∂a] .+= S[a]; y[∂a] .+= h[a]
             elseif update == :par
-                ηr = rndamp*(1-ρ)*(2*rand()-1) + η    # ρr ~ U(2ρ-1,1) (with <ρ̃>=ρ) if rndamp true
-                ε = max(ε, update!(S[a], Snew,ηr), update!(h[a], ynew,ηr))
+                ρr = rndamp*(1-ρ)*(2*rand()-1) + ρ    # ρr ~ U(2ρ-1,1) (with <ρ̃>=ρ) if rndamp true
+                ε = max(ε, update!(S[a], Snew,ρr), update!(h[a], ynew,ρr))
             end
             μt[∂a] .= µtl[a] ; Σt[∂a,∂a] .= Σtl[a]
         end
