@@ -34,7 +34,7 @@ struct DCState
     Sc  :: Vector{Matrix}			# array of cavity inverse correlation matrix (one for each factor)
 end
 
-function DCState(N::Int,m::Vector{Int};f::Function=n->2e-2*(rand(n) .- 0.5))
+function DCState(N::Int,m::Vector{Int},h0::Float64;f::Function=n->h0*(rand(n) .- 0.5))
     M=length(m)
     return DCState([zeros(m[a]) for a=1:M],
                    [zeros(m[a],m[a]) for a=1:M],
@@ -47,3 +47,18 @@ function DCState(N::Int,m::Vector{Int};f::Function=n->2e-2*(rand(n) .- 0.5))
                    [zeros(m[a]) for a=1:M],
                    [zeros(m[a],m[a]) for a=1:M])
 end
+
+
+#function DCState(N::Int,m::Vector{Int};f::Function=n->2e-2*(rand(n) .- 0.5))
+#    M=length(m)
+#    return DCState([zeros(m[a]) for a=1:M],
+#                   [zeros(m[a],m[a]) for a=1:M],
+#                   zeros(N),
+#                   zeros(N,N),
+#				   zeros(N),
+#                   zeros(N,N),
+#                   [f(m[a]) for a=1:M],
+#                   [eye(m[a]) for a=1:M],
+#                   [zeros(m[a]) for a=1:M],
+#                   [zeros(m[a],m[a]) for a=1:M])
+#end

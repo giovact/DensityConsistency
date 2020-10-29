@@ -13,7 +13,6 @@ Density consistency algorithm
 
 function density_consistency(Ψ::Vector{<:Factor},
 			N::Int;
-			state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)]),
 			closure::Symbol = :DC,									# closure protocol (default = :DC)
 			maxiter::Int64 = 2000,
 			η::Float64 = 1.0, 										# interpolation parameter (DC closure)
@@ -30,7 +29,9 @@ function density_consistency(Ψ::Vector{<:Factor},
 			Ag::Matrix{Float64} = zeros(N,N),
 			convtype::Symbol = :params,								# convergence criterion : tilted moments or gaussian factor parameters
 			seed :: Int64 = -1,
-			callback::Function  = (x...)->nothing
+			callback::Function  = (x...)->nothing,
+			h0scale::Float64 = 1e-3,
+			state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)],h0scale),
 			)
 
     @extract state : μtl Σtl μt Σt µ Σ h S yc Sc
