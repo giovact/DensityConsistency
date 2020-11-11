@@ -31,7 +31,7 @@ function density_consistency(Ψ::Vector{<:Factor},
 			seed :: Int64 = -1,
 			callback::Function  = (x...)->nothing,
 			h0scale::Float64 = 1e-3,
-			state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)],h0scale),
+			state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)]; h0 = h0scale),
 			)
 
     @extract state : μtl Σtl μt Σt µ Σ h S yc Sc
