@@ -54,6 +54,12 @@ function setclosure!(F::Factor, y::Vector{Float64},
         icov = inv(cov + λ * I)
         Snew = icov-S
         ynew = icov * av - y
+    if closure == :DC2
+        cov = η*cov + (1-η) * Diagonal(cov)
+        icov = inv(cov + λ * I)
+        means = Diagonal(cov).*atanh.(clamp(av, -1+epsclamp,1-epsclamp))
+        Snew = icov - S
+        ynew = icov * means - y
     elseif closure == :EP
         av, cov = moments(F,y,S)
         icov = inv(cov + λ*I)
