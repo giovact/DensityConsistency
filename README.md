@@ -1,40 +1,34 @@
-# README #
+# Density Consistency
 
-Density Consistency algorithm implementation in Julia 1.3.1
+A julia code to run Density Consistency algorithm. 
 
-### What is this repository for? ###
-### Require ###
+Check out our paper for additional details!
 
-Random, SparseArrays
+Alfredo Braunstein, Giovanni Catania and Luca Dall’Asta
+*Loop corrections in spin models through density consistency*
+2019, Phys. Rev. Lett. [123020604][papero], arXiv:[1810.10602][paperoarxiv]
 
+### Package requirements
+- ExtractMacro
+- SparseArrays
+- Random
 
-* Quick summary
+## Usage
+The package is not yet registered. To use it, clone the repository locally:
 
+> git clone https://github.com/pagnani/PlmIsing.git
 
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
+### Loading
 ```julia
-r = evaluate(Euclidean(), x, y)
-r = Euclidean()(x, y)
+include("src/DC.jl")
+using .DC
 ```
+A small number of tests can be run by typing `julia run_test.jl`
+Check the  `example.ipynb` jupyter notebook for basic usage
+[//]: # (Links)
 
-### Who do I talk to? ###
+   [papero]: <https://journals-aps-org.ezproxy.biblio.polito.it/prl/abstract/10.1103/PhysRevLett.123.020604>
+   [paperoarxiv]: <https://arxiv.org/abs/1810.10602>
+   [example_notebook]: <https://arxiv.org/abs/1810.10602>
 
-* Repo owner or admin
-* Other community or team contact
+
