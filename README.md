@@ -25,10 +25,9 @@ using .DC
 ```
 A small number of tests can be run by typing `julia run_test.jl`
 Check the  `example.ipynb` jupyter notebook for basic usage
-[//]: # (Links)
 
-   [papero]: <https://journals-aps-org.ezproxy.biblio.polito.it/prl/abstract/10.1103/PhysRevLett.123.020604>
-   [paperoarxiv]: <https://arxiv.org/abs/1810.10602>
-   [example_notebook]: <https://arxiv.org/abs/1810.10602>
+[papero]: <https://journals-aps-org.ezproxy.biblio.polito.it/prl/abstract/10.1103/PhysRevLett.123.020604>
+[paperoarxiv]: <https://arxiv.org/abs/1810.10602>
+[example_notebook]: <https://arxiv.org/abs/1810.10602>
 
 
