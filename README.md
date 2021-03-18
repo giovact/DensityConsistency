@@ -8,6 +8,10 @@ Alfredo Braunstein, Giovanni Catania and Luca Dall’Asta
 *Loop corrections in spin models through density consistency*
 2019, Phys. Rev. Lett. [123020604][papero], arXiv:[1810.10602][paperoarxiv]
 
+### Theory
+The algorithm allows to compute marginal marginal distributions of:
+$$p\left(\boldsymbol{x}\right) = \frac{1}{Z}\prod_{a}\psi_{a}\left(\boldsymbol{x}_{a}\right)\prod_{i}\Delta_{i}\left(x_{i}\right)$$
+where $$x_{i} \in \{-1,1\} $$
 ### Package requirements
 - ExtractMacro
 - SparseArrays
