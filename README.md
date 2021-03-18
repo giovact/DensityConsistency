@@ -29,6 +29,11 @@ Random, SparseArrays
 * Code review
 * Other guidelines
 
+```julia
+r = evaluate(Euclidean(), x, y)
+r = Euclidean()(x, y)
+```
+
 ### Who do I talk to? ###
 
 * Repo owner or admin
