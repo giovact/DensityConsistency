@@ -16,7 +16,7 @@ Alfredo Braunstein, Giovanni Catania and Luca Dall’Asta
 ## Usage
 The package is not yet registered. To use it, clone the repository locally:
 
-> git clone https://github.com/pagnani/PlmIsing.git
+> git clone https://github.com/giovact/DensityConsistency
 
 ### Loading
 ```julia
