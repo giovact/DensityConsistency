@@ -10,8 +10,8 @@ Alfredo Braunstein, Giovanni Catania and Luca Dall’Asta
 
 ### Theory
 The algorithm allows to compute marginal marginal distributions of:
-$$p\left(\boldsymbol{x}\right) = \frac{1}{Z}\prod_{a}\psi_{a}\left(\boldsymbol{x}_{a}\right)\prod_{i}\Delta_{i}\left(x_{i}\right)$$
-where $$x_{i} \in \{-1,1\} $$
+<img src="https://render.githubusercontent.com/render/math?math=p\left(\boldsymbol{x}\right) = \frac{1}{Z}\prod_{a}\psi_{a}\left(\boldsymbol{x}_{a}\right)\prod_{i}\Delta_{i}\left(x_{i}\right)">
+where <img src="https://render.githubusercontent.com/render/math?math=x_{i} \in \{-1,1\}">
 ### Package requirements
 - ExtractMacro
 - SparseArrays
