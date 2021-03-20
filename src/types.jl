@@ -10,6 +10,7 @@ struct PairIsing <: Factor
     hi::Float64
     hj::Float64
     idx::Vector{Int64}
+	PairIsing(J,hi,hj,idx) = length(idx)!=2 ? error("idx must have length 2") : new(J,hi,hj,idx)
 end
 
 function IsingFG(N::Int64,h::Vector{Float64},J::SparseMatrixCSC{Float64,Int64}, t::Symbol; Adj::SparseMatrixCSC{Int64,Int64} = (J.!=0)*1)
