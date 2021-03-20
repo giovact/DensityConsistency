@@ -13,7 +13,7 @@ using .DC
         N = length(model["h"])
         βvec = [0.1,0.3]
         @testset "β $β" for β in βvec
-            psi = DC.IsingFG(N,β*model["h"],β*sparse(model["J"]), :Fun);
+            psi = DC.IsingFG(N,β*model["h"],β*sparse(model["J"]), :EnergyFun);
             ϕ , res, it, epsv = DC.density_consistency(psi,N,verbose = false, epsconv = 1e-10,ρ = 0.9)
             @test isapprox(true_moments[β][1], ϕ.µt, atol = 1e-7)
         end
@@ -27,7 +27,7 @@ end
     model = load(string(dir,filenames[3],"model.jld"));
     N = length(model["h"])
     β = 0.2
-    psiF = DC.IsingFG(N,β*model["h"],β*sparse(model["J"]), :Fun);
+    psiF = DC.IsingFG(N,β*model["h"],β*sparse(model["J"]), :EnergyFun);
     psiPI = DC.IsingFG(N,β*model["h"],β*sparse(model["J"]), :IsingPair);
     ϕF , res, it, epsv = DC.density_consistency(psiF,N,verbose = false, epsconv = 1e-10, ρ = 0.9)
     ϕI , res, it, epsv = DC.density_consistency(psiPI,N,verbose = false, epsconv = 1e-10, ρ = 0.9)
