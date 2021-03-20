@@ -5,6 +5,6 @@ export DCState, density_consistency
 
 include("types.jl")
 include("Factor.jl")
-include("dc_main.jl")
+include("density_consistency.jl")
 
 end # end module
