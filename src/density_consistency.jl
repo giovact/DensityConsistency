@@ -9,8 +9,35 @@ end
 
 """
 Density consistency algorithm
-"""
 
+Compute approximate marginals of ``p( \\bf{x} )=\\frac1Z \\prod_a \\psi_{a}(x_{\\partial a})``
+
+Input:
+* `Ψ::Vector{<:Factor}`
+* `N::Int`
+* `closure::Symbol = :DC,`									# closure protocol (default = :DC)
+* `maxiter::Int64 = 2000,`
+* `η::Float64 = 1.0, 	`									# interpolation parameter (DC closure) η=0 gives BP fixed points
+* `γ0::Float64 = 0.0,	`									# reinforcement
+* `epsconv::Float64 = 1e-6,`								# precision convergence
+* `Λ::Float64 = 1e-15,		`								# add a diagonal matrix Λ*I in the inversion of the full correlation matrix
+* `λ::Float64 = 1e-15,		`								# add a diagonal matrix λ*I in the inversion of the cavity and tilted correlation matrices
+* `update::Symbol = :par,	`								# type of update (parallel or sequential)
+* `rndamp::Bool = false,	`								# eventually, apply a random damping (might be useful in parallel update)
+* `epsclamp::Float64 = 1e-15,`								# clamp
+* `ρ::Float64 = 0.0,		`								# damping for parameters' update (ρ = 0 means no damping)
+* `verbose::Bool = true,	`								# print at (un)convergence
+* `Hg::Vector{Float64} = zeros(N),`
+* `Ag::Matrix{Float64} = zeros(N,N),`
+* `convtype::Symbol = :params,		`						# convergence criterion : tilted moments or gaussian factor parameters
+* `seed :: Int64 = -1,`
+* `callback::Function  = (x...)->nothing,`
+* `h0scale::Float64 = 1e-3,`
+* `state::DCState = DCState( N, [length(Ψ[a].idx) for a=1:length(Ψ)]; h0 = h0scale),`
+
+
+
+"""
 function density_consistency(Ψ::Vector{<:Factor},
 			N::Int;
 			closure::Symbol = :DC,									# closure protocol (default = :DC)
@@ -45,7 +72,7 @@ function density_consistency(Ψ::Vector{<:Factor},
     γ = 0.0
     while iter<=maxiter
     	γ += γ0
-        A[:] .= 0.0; y .= μt * γ #check µt?
+        A[:] .= 0.0; y .= μt * γ
         A .+= Ag; y .+= Hg
         μt[:] .= 0.0; Σt[:] .= 0.0; #may be useless
         ε,εₘ = 0.0 ,  0.0

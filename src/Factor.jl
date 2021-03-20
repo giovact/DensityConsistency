@@ -1,10 +1,26 @@
-function moments(F::PairIsing, y::Vector{Float64}, S::Array{Float64,2})
+"""
+Computes first and second moments of `` \\exp[Jx_{i}x_{j} + h_{i}x_{i} +h_{j}x_{j} -\\frac12 x^t \\cdot S \\cdot x + x^t \\cdot y] ``
+
+Input:
+* `F::PairIsing <:Factor`: Factor node ``\\psi_{ij}``
+* `y::Vector{Float64}`: Array of cavity fields ``\\in \\mathbb{R}^{ 2 }``
+* `S::Vector{Float64}`: Cavity coupling matrix ``\\in \\mathbb{R}^{  2 \\times 2 }``
+"""
+function moments(F::IsingPair, y::Vector{Float64}, S::Array{Float64,2})
     mi = tanh(F.hi + y[1] + atanh(tanh(F.J - S[1,2]) * tanh(F.hj + y[2])))
     mj = tanh(F.hj + y[2] + atanh(tanh(F.J - S[1,2]) * tanh(F.hi + y[1])))
     cij = tanh(F.J - S[1,2] + atanh(tanh(F.hj + y[2]) * tanh(F.hi + y[1]))) - mi*mj
     return [mi;mj],[1-mi^2 cij; cij 1-mj^2]
 end
 
+"""
+Computes first and second moments of `` \\exp[-\\psi.E(x) -\\frac12 x^t \\cdot S \\cdot x + x^t \\cdot y] ``
+
+Input:
+* `F::EnergyFun <:Factor`: Factor node ``\\psi_{a}``
+* `y::Vector{Float64}`: Array of cavity fields ``\\in \\mathbb{R}^{ |\\partial a| }``
+* `S::Vector{Float64}`: Cavity coupling matrix ``\\in \\mathbb{R}^{  |\\partial a| \\times |\\partial a| }``
+"""
 function moments(F::EnergyFun, y::Vector{Float64}, S::Array{Float64,2})
     n = length(F.idx)
     N = 1<<n
@@ -27,13 +43,14 @@ function moments(F::EnergyFun, y::Vector{Float64}, S::Array{Float64,2})
     return av, cov
 end
 
-
-"""
-This function should compute first and second moments of exp(-F.E(x) -½ x'*S*x + x'*y)
-"""
-
 pearsonmap(x) = sqrt(1-x)/(atanh(sqrt(1-x))*x)
 
+
+
+"""
+Update gaussian parameters according to closure
+
+"""
 function setclosure!(F::Factor, y::Vector{Float64},
                         S::Array{Float64,2},
                         µta::Vector{Float64},
