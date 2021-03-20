@@ -12,6 +12,9 @@ Alfredo Braunstein, Giovanni Catania and Luca Dall’Asta
 The algorithm allows to compute marginal marginal distributions of:
 <img src="https://render.githubusercontent.com/render/math?math=p\left(\boldsymbol{x}\right) = \frac{1}{Z}\prod_{a}\psi_{a}\left(\boldsymbol{x}_{a}\right)\prod_{i}\Delta_{i}\left(x_{i}\right)">
 where <img src="https://render.githubusercontent.com/render/math?math=x_{i} \in \{-1,1\}">
+
+![F(\phi|m) = \int_0^\phi d\theta (1 - m\sin^2\theta)^{-1/2}](http://mathurl.com/av9eou5.png)
+
 ### Package requirements
 - ExtractMacro
 - SparseArrays
