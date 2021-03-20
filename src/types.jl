@@ -37,7 +37,7 @@ struct IsingPair <: Factor
     hi::Float64
     hj::Float64
     idx::Vector{Int64}
-	PairIsing(J,hi,hj,idx) = length(idx)!=2 ? error("idx must have length 2") : new(J,hi,hj,idx)
+	IsingPair(J,hi,hj,idx) = length(idx)!=2 ? error("idx must have length 2") : new(J,hi,hj,idx)
 end
 
 """
@@ -63,6 +63,8 @@ function IsingFG(N::Int64,h::Vector{Float64},J::SparseMatrixCSC{Float64,Int64}, 
 end
 
 """
+DCState
+
 Istantaneous state of Density Consistency run
 
 Fields:
