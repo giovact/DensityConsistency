@@ -80,16 +80,16 @@ Fields:
 * `Sc  :: Vector{Matrix}`		 array of cavity inverse correlation matrix (one for each factor)
 """
 struct DCState
-    μtl :: Vector{Vector}		# array of first moments of tilted distributions (one for each factor)
-    Σtl :: Vector{Matrix}		# array of second moments of tilted distributions (one for each factor)
-    μt  :: Vector			# mean vector w.r.t tilted distribution (size N)
-    Σt  :: Matrix			# correlation matrix w.r.t tilted distribution (size NxN)
-    µ   :: Vector			# mean vector of gaussian distribution (size N)
-    Σ   :: Matrix			# correlation matrix of the gaussian distribution  (size NxN)
-    h   :: Vector{Vector}		# array of gaussian field vector (one for each factor)
-    S   :: Vector{Matrix}		# array of inverse correlation matrix (one for each factor)
-    yc  :: Vector{Vector}		# array of cavity fields vector (one for each factor)
-    Sc  :: Vector{Matrix}		# array of cavity inverse correlation matrix (one for each factor)
+    μtl :: Vector{Vector}
+    Σtl :: Vector{Matrix}
+    μt  :: Vector
+    Σt  :: Matrix
+    µ   :: Vector			
+    Σ   :: Matrix
+    h   :: Vector{Vector}
+    S   :: Vector{Matrix}
+    yc  :: Vector{Vector}
+    Sc  :: Vector{Matrix}
 end
 
 function DCState(N::Int,m::Vector{Int};h0::Float64 = 1e-3,f::Function=n->h0*(rand(n) .- 0.5))
