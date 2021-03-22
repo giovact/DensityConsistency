@@ -21,7 +21,7 @@ DC allows to compute marginal marginal distributions of discrete graphical model
 
 <img src="https://render.githubusercontent.com/render/math?math=p\left(\boldsymbol{\sigma}\right) = \frac{1}{Z}\prod_{a}\psi_{a}\left(\boldsymbol{\sigma}_{a}\right)">
 
-where σᵢ ∈ {-1,1}
+where σᵢ ∈ {-1,1} and each factor ψa encodes for local interactions between the ∂a variables. This parametrizations encodes any Boltzmann equilibrium measure with arbitrary high-order interaction terms (Ising, p-spin) as well as the set of solutions for a single-instance set of k-SAT formulas.
 
 
 Each factor node (or compatibility function) ψₐ is parametrized as ψₐ ∝ exp(-E(xₐ))  and defined by:
@@ -49,7 +49,6 @@ Some additional named arguments:
 * `convtype::Symbol = :params`: convergence criterion on `:moments` or  gaussian factor `:params`
 
 
-Check the script `types.jl` for basic Ising Factor Graph constructors.
 Check `example_Ising.ipynb` jupyter notebook for basic usage on the Ising model
 
 
