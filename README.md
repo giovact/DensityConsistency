@@ -1,13 +1,18 @@
 # Density Consistency
 
-A julia code to run Density Consistency algorithm. 
+A julia code to run Density Consistency algorithm.
 
 DC allows to compute marginal marginal distributions of discrete graphical models:
 
 <img src="https://render.githubusercontent.com/render/math?math=p\left(\boldsymbol{x}\right) = \frac{1}{Z}\prod_{a}\psi_{a}\left(\boldsymbol{x}_{a}\right)\prod_{i}\Delta_{i}\left(x_{i}\right)">
 
-where <img src="https://render.githubusercontent.com/render/math?math=x_{i} \in \{-1,1\}">
+where xᵢ ∈ {-1,1}
 
+Each factor ψₐ is defined as ψₐ ∝ exp(-E(xₐ))   a structure with two fields:
+* `E::Function`: E(xₐ)
+* `idx::Vector{Int64}`: ∂a indeces
+
+Check the script `types.jl` for basic Ising Factor Graph constructors.
 
 ### Package requirements
 - ExtractMacro
@@ -26,9 +31,8 @@ using .DC
 A small number of tests can be run by typing `julia run_test.jl` (requires Tests.jl package)
 Check `example_Ising.ipynb` jupyter notebook for basic usage on the Ising model
 
-The function to run is ``density_consistency``
+The algorithm runs by calling the function ``density_consistency``, taking the following arguments:
 
-Input:
 * `Ψ::Vector{<:Factor}`: Array of factor nodes ψₐ
 * `N::Int`: number of spins
 
@@ -50,6 +54,3 @@ Alfredo Braunstein, Giovanni Catania and Luca Dall’Asta
 [papero]: <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.123.020604>
 [paperoarxiv]: <https://arxiv.org/abs/1810.10602>
 [example_notebook]: <https://arxiv.org/abs/1810.10602>
-
-
-
