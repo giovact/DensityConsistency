@@ -20,6 +20,9 @@ Input:
 * `F::EnergyFun <:Factor`: Factor node ``\\psi_{a}``
 * `y::Vector{Float64}`: Array of cavity fields ``\\in \\mathbb{R}^{ |\\partial a| }``
 * `S::Vector{Float64}`: Cavity coupling matrix ``\\in \\mathbb{R}^{  |\\partial a| \\times |\\partial a| }``
+
+Output: first and second moments under tilted "a" distribution -> `av, cov`
+where `av` is a vector of size ``|\\partial a|``, `cov`  is a ``|\\partial a| \\times |\\partial a|`` matrix }
 """
 function moments(F::EnergyFun, y::Vector{Float64}, S::Array{Float64,2})
     n = length(F.idx)
@@ -48,7 +51,27 @@ pearsonmap(x) = sqrt(1-x)/(atanh(sqrt(1-x))*x)
 
 
 """
-Update gaussian parameters according to closure
+Update the parameters of the gaussian factor "a" according to closure.
+
+Input:
+
+* `F::EnergyFun <:Factor`: Factor node ``\\psi_{a}``
+* `y::Vector{Float64}`: Array of cavity fields of size ``|\\partial a|``
+* `S::Vector{Float64}`: Cavity coupling matrix of size ``|\\partial a| \\times |\\partial a|``
+* `μta::Vector{Float64}`: tilted magnetizations, size ``|\\partial a|`` -> gets updated as ref.
+* `Σta::Matrix{Float64}`: Correlation matrix , size ``|\\partial a| \\times |\\partial a|`` -> gets updated as ref.
+* `closure::Symbol`: closure protocol
+* `η::Float64`: interpolation parameter (valid on :DC closure) -> ``η=0`` gives BP fixed points
+* `epsclamp::Float64` clamp tilted moments in [-1+epsclamp, 1-epsclamp]
+* `epsconv::Float64`: precision convergence
+* `epsmom::Float64`: error over moments at iteration t
+
+Output:
+
+* `ynew::Vector{Float64}`: fields of gauss. factor a @iter t+1, size ``|\\partial a|``
+* `Snew::Vector{Float64}`: coupling matrix of gauss. factor a @iter t+1, ``|\\partial a| \\times |\\partial a|``
+* `epsmom::Float64`: error over moments at iteration t+1
+
 
 """
 function setclosure!(F::Factor, y::Vector{Float64},

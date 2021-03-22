@@ -11,7 +11,10 @@ end
 """
 Density consistency algorithm
 
-Compute approximate marginals of ``p( \\bf{x} )=\\frac1Z \\prod_a \\psi_{a}(x_{\\partial a})``
+Compute approximate marginals of
+``p( \\bf{x} )=\\frac1Z \\Phi(\\bf{x} ) \\prod_a \\psi_{a}(x_{\\partial a})``
+
+where `\\Phi(\\bf{x} )` is an optional multivariate Gaussian distribution
 
 Input:
 
@@ -32,6 +35,8 @@ Optional named arguments:
 * `epsclamp::Float64 = 1e-15:` clamp tilted moments in [-1+epsclamp, 1-epsclamp]
 * `ρ::Float64 = 0.9`: damping for parameters' update (ρ = 0 means no damping)
 * `verbose::Bool = true` print at (un)convergence
+* `Hg::Vector{Float64} = zeros(N)`: field vector of `\\Phi(\\bf{x} )`
+* `Ag::Matrix{Float64} = zeros(N,N)`: inverse covariance matrix of `\\Phi(\\bf{x} )`
 * `convtype::Symbol = :params`: convergence criterion on :moments or  gaussian factor :params
 * `seed :: Int64 = -1`: seed for RNG
 * `callback::Function  = (x...)->nothing`: callback function to print progress report
@@ -43,7 +48,7 @@ Output:
 * `state::DCState`: final DCstate -> see [`DCState`](@ref)
 * `convergence_flag::Symbol`: :converged or :unconverged with criterion `convtype`
 * `iter::Int`: number of iterations needed to converge
-* `errors::Vector{Float64}`: errors on params and moments at convergence [error_params , error_moments]
+* `errors::Vector{Float64}`: errors on params and moments at convergence `[error_params , error_moments]`
 
 """
 function density_consistency(Ψ::Vector{<:Factor},
