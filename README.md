@@ -54,7 +54,9 @@ Check `example_Ising.ipynb` jupyter notebook for basic usage on the Ising model
 
 ### Reference
 Alfredo Braunstein, Giovanni Catania and Luca Dall’Asta
+
 *Loop corrections in spin models through density consistency*
+
 2019, Phys. Rev. Lett. [123020604][papero], arXiv:[1810.10602][paperoarxiv]
 
 
