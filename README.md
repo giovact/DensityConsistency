@@ -2,20 +2,25 @@
 
 A julia code to run Density Consistency algorithm.
 
-### Package requirements
+## Installation
+
+The package is not registered. To use it, clone the repository locally:
+> git clone https://github.com/giovact/DensityConsistency
+
+
+#### Package requirements
 - ExtractMacro
 - Random
 - SparseArrays
 
-## Usage
-The package is not registered. To use it, clone the repository locally:
-> git clone https://github.com/giovact/DensityConsistency
 
-### Loading
+#### Loading
 ```julia
 include("src/DC.jl")
 using .DC
 ```
+
+## Usage
 
 DC allows to compute marginal marginal distributions of discrete graphical models:
 
@@ -33,6 +38,8 @@ Each factor node (or compatibility function) ψₐ is parametrized as ψₐ ∝ 
 Example (Ising Pair):
 `ψ_ij = DC.EnergyFun((x::Vector{Int64}-> -J*x[1]*x[2]) , [i,j])`
 
+
+### Run
 
 The algorithm runs by calling the function ``density_consistency``, taking the following arguments:
 
@@ -55,7 +62,7 @@ Check `example_Ising.ipynb` jupyter notebook for basic usage on the Ising model
 ### Reference
 Alfredo Braunstein, Giovanni Catania and Luca Dall’Asta\
 *Loop corrections in spin models through density consistency*\
-2019, Phys. Rev. Lett. [123020604][papero], arXiv:[1810.10602][paperoarxiv]
+2019, Phys. Rev. Lett. 123, [020604][papero], arXiv:[1810.10602][paperoarxiv]
 
 
 [papero]: <https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.123.020604>
