@@ -37,9 +37,9 @@ Some additional named arguments:
 * `closure::Symbol = :DC`: closure protocol
 * `η::Float64 = 1.0`: interpolation parameter (valid on :DC closure) -> ``η=0`` gives BP fixed points
 * `epsconv::Float64 = 1e-6`: precision convergence
-* `update::Symbol = :par`: type of update -> parallel (:par) or random sequential (:seq)
-* `ρ::Float64 = 0.9`: damping for parameters' update (ρ = 0 means no damping)
-* `convtype::Symbol = :params`: convergence criterion on :moments or  gaussian factor :params
+* `update::Symbol = :par`: type of update -> parallel (`:par`) or random sequential (`:seq`)
+* `ρ::Float64 = 0.9`: damping for parameters' update (`ρ = 0` means no damping)
+* `convtype::Symbol = :params`: convergence criterion on `:moments` or  gaussian factor `:params`
 
 ### Reference
 Alfredo Braunstein, Giovanni Catania and Luca Dall’Asta
