@@ -2,18 +2,6 @@
 
 A julia code to run Density Consistency algorithm.
 
-DC allows to compute marginal marginal distributions of discrete graphical models:
-
-<img src="https://render.githubusercontent.com/render/math?math=p\left(\boldsymbol{x}\right) = \frac{1}{Z}\prod_{a}\psi_{a}\left(\boldsymbol{x}_{a}\right)\prod_{i}\Delta_{i}\left(x_{i}\right)">
-
-where xᵢ ∈ {-1,1}
-
-Each factor ψₐ is defined as ψₐ ∝ exp(-E(xₐ))   a structure with two fields:
-* `E::Function`: E(xₐ)
-* `idx::Vector{Int64}`: ∂a indeces
-
-Check the script `types.jl` for basic Ising Factor Graph constructors.
-
 ### Package requirements
 - ExtractMacro
 - Random
@@ -28,8 +16,18 @@ The package is not registered. To use it, clone the repository locally:
 include("src/DC.jl")
 using .DC
 ```
-A small number of tests can be run by typing `julia run_test.jl` (requires Tests.jl package)
-Check `example_Ising.ipynb` jupyter notebook for basic usage on the Ising model
+
+DC allows to compute marginal marginal distributions of discrete graphical models:
+
+<img src="https://render.githubusercontent.com/render/math?math=p\left(\boldsymbol{\sigma}\right) = \frac{1}{Z}\prod_{a}\psi_{a}\left(\boldsymbol{\sigma}_{a}\right)">
+
+where xᵢ ∈ {-1,1}
+
+
+Each factor ψₐ is defined as ψₐ ∝ exp(-E(xₐ))   a structure with two fields:
+* `E::Function`: E(xₐ)
+* `idx::Vector{Int64}`: ∂a indeces
+
 
 The algorithm runs by calling the function ``density_consistency``, taking the following arguments:
 
@@ -44,6 +42,11 @@ Some additional named arguments:
 * `update::Symbol = :par`: type of update -> parallel (`:par`) or random sequential (`:seq`)
 * `ρ::Float64 = 0.9`: damping for parameters' update (`ρ = 0` means no damping)
 * `convtype::Symbol = :params`: convergence criterion on `:moments` or  gaussian factor `:params`
+
+
+Check the script `types.jl` for basic Ising Factor Graph constructors.
+Check `example_Ising.ipynb` jupyter notebook for basic usage on the Ising model
+
 
 ### Reference
 Alfredo Braunstein, Giovanni Catania and Luca Dall’Asta
