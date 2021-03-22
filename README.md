@@ -21,12 +21,17 @@ DC allows to compute marginal marginal distributions of discrete graphical model
 
 <img src="https://render.githubusercontent.com/render/math?math=p\left(\boldsymbol{\sigma}\right) = \frac{1}{Z}\prod_{a}\psi_{a}\left(\boldsymbol{\sigma}_{a}\right)">
 
-where xᵢ ∈ {-1,1}
+where σᵢ ∈ {-1,1}
 
 
-Each factor ψₐ is defined as ψₐ ∝ exp(-E(xₐ))   a structure with two fields:
+Each factor node (or compatibility function) ψₐ is parametrized as ψₐ ∝ exp(-E(xₐ))  and defined by:
+
+`struct EnergyFun <: Factor`
 * `E::Function`: E(xₐ)
 * `idx::Vector{Int64}`: ∂a indeces
+
+Example (Ising Pair):
+`ψ_ij = DC.EnergyFun((x::Vector{Int64}-> -J*x[1]*x[2]) , [i,j])`
 
 
 The algorithm runs by calling the function ``density_consistency``, taking the following arguments:
