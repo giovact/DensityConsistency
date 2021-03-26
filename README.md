@@ -10,6 +10,7 @@ The package is not registered. To use it, clone the repository locally:
 
 #### Package requirements
 - ExtractMacro
+- LinearAlgebra
 - Random
 - SparseArrays
 
