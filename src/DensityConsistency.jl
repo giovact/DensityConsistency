@@ -1,10 +1,10 @@
-module DC
+module DensityConsistency
 
 using ExtractMacro, LinearAlgebra, SparseArrays, Random
 export DCState, density_consistency
 
 include("types.jl")
 include("closures.jl")
-include("density_consistency.jl")
+include("dc_main.jl")
 
 end # end module
