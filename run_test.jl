@@ -1,7 +1,7 @@
 using JLD, SparseArrays, Test, Random
 
-include("src/DC.jl")
-using .DC
+include("src/DensityConsistency.jl")
+using .DensityConsistency
 
 @testset "Exactness on trees" begin
     dir = "test/Ising_trees/"
@@ -13,8 +13,8 @@ using .DC
         N = length(model["h"])
         βvec = [0.1,0.3]
         @testset "β $β" for β in βvec
-            psi = DC.IsingFG(N,β*model["h"],β*sparse(model["J"]), :EnergyFun);
-            ϕ , res, it, epsv = DC.density_consistency(psi,N,verbose = false, epsconv = 1e-10,ρ = 0.9)
+            psi = DensityConsistency.IsingFG(N,β*model["h"],β*sparse(model["J"]), :EnergyFun);
+            ϕ , res, it, epsv = DensityConsistency.density_consistency(psi,N,verbose = false, epsconv = 1e-10,ρ = 0.9)
             @test isapprox(true_moments[β][1], ϕ.µt, atol = 1e-7)
         end
     end
@@ -27,10 +27,10 @@ end
     model = load(string(dir,filenames[3],"model.jld"));
     N = length(model["h"])
     β = 0.2
-    psiF = DC.IsingFG(N,β*model["h"],β*sparse(model["J"]), :EnergyFun);
-    psiPI = DC.IsingFG(N,β*model["h"],β*sparse(model["J"]), :IsingPair);
-    ϕF , res, it, epsv = DC.density_consistency(psiF,N,verbose = false, epsconv = 1e-10, ρ = 0.9)
-    ϕI , res, it, epsv = DC.density_consistency(psiPI,N,verbose = false, epsconv = 1e-10, ρ = 0.9)
+    psiF = DensityConsistency.IsingFG(N,β*model["h"],β*sparse(model["J"]), :EnergyFun);
+    psiPI = DensityConsistency.IsingFG(N,β*model["h"],β*sparse(model["J"]), :IsingPair);
+    ϕF , res, it, epsv = DensityConsistency.density_consistency(psiF,N,verbose = false, epsconv = 1e-10, ρ = 0.9)
+    ϕI , res, it, epsv = DensityConsistency.density_consistency(psiPI,N,verbose = false, epsconv = 1e-10, ρ = 0.9)
     #@testset "fields $x" for x in fieldnames(typeof(ϕF))
     #    @test isapprox(getfield(ϕF,x),getfield(ϕI,x),atol = 1e-9)
     #end
